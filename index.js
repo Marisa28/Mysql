@@ -1,99 +1,194 @@
-const Manager = require("./lib/Manager")
-const Engineer = require("./lib/Engineer")
-const Intern = require("./lib/Intern")
+const { prompt } = require("inquirer");
 
-const inquirer = require("inquirer")
+const db = require("./db/connection.js");
+require("console.table");
+start();
+
+function start() {
+    prompt([
+      {
+        type: "list",
+        name: "choice",
+        message: "Please select your action",
+        choices: [ 
+          {
+            name: "View All Employees",
+            value: "VIEW_EMPLOYEES"
+          },
+          {
+            name: "View All Employees By Department",
+            value: "VIEW_EMPLOYEES_BY_DEPARTMENT"
+          },
+          {
+            name: "View All Employees By Manager",
+            value: "VIEW_EMPLOYEES_BY_MANAGER"
+          },
+          {
+            name: "Add Employee",
+            value: "ADD_EMPLOYEE"
+          },
+          {
+            name: "Remove Employee",
+            value: "REMOVE_EMPLOYEE"
+          },
+          {
+            name: "Update Employee Role",
+            value: "UPDATE_EMPLOYEE_ROLE"
+          },
+          {
+            name: "Update Employee Manager",
+            value: "UPDATE_EMPLOYEE_MANAGER"
+          },
+          {
+            name: "View All Roles",
+            value: "VIEW_ROLES"
+          },
+          {
+            name: "Add Role",
+            value: "ADD_ROLE"
+          },
+          {
+            name: "Remove Role",
+            value: "REMOVE_ROLE"
+          },
+          {
+            name: "View All Departments",
+            value: "VIEW_DEPARTMENTS"
+          },
+          {
+            name: "Add Department",
+            value: "ADD_DEPARTMENT"
+          },
+          {
+            name: "Remove Department",
+            value: "REMOVE_DEPARTMENT"
+          },
+         // {
+           // name: "View Total Utilized Budget By Department",
+          //  value: "VIEW_UTILIZED_BUDGET_BY_DEPARTMENT"
+          //},
+          {
+            name: "Quit",
+            value: "QUIT"
+          }
+        ]
+      }
+    ]).then(res => {
+      let choice = res.choice;
+      // Call the appropriate function depending on what the user chose
+      switch (choice) {
+        case "VIEW_EMPLOYEES":
+          viewEmployees();
+          break;
+        case "VIEW_EMPLOYEES_BY_DEPARTMENT":
+          viewEmployeesByDepartment();
+          break;
+        case "VIEW_EMPLOYEES_BY_MANAGER":
+          viewEmployeesByManager();
+          break;
+        case "ADD_EMPLOYEE":
+          addEmployee();
+          break;
+        case "REMOVE_EMPLOYEE":
+          removeEmployee();
+          break;
+        case "UPDATE_EMPLOYEE_ROLE":
+          updateEmployeeRole();
+          break;
+        case "UPDATE_EMPLOYEE_MANAGER":
+          updateEmployeeManager();
+          break;
+        case "VIEW_DEPARTMENTS":
+          viewDepartments();
+          break;
+        case "ADD_DEPARTMENT":
+          addDepartment();
+          break;
+        case "REMOVE_DEPARTMENT":
+          removeDepartment();
+          break;
+       // case "VIEW_UTILIZED_BUDGET_BY_DEPARTMENT":
+          //viewUtilizedBudgetByDepartment();
+         // break;
+        case "VIEW_ROLES":
+          viewRoles();
+          break;
+        case "ADD_ROLE":
+          addRole();
+          break;
+        case "REMOVE_ROLE":
+          removeRole();
+          break;
+        default:
+          quit();
+      }
+    }
+    )
+  }
  
-// create question for manager engineer and intern 
-const managerquestions  = [
-    {
-        type: "input",
-        name: "name",
-        message: " provide manager name"
-    },
-    {
-        type: "input",
-        name: "id",
-        message: "provide manager id "
-    },
-    {
-        type: "input",
-        name: "email",
-        message: "provide manager email "
-    }, 
-    {
-        type: "input",
-        name: "officenumber",
-        message: "provide manager office number "
-    }, 
-]
-const engineerquestions  = [
-    {
-        type: "input",
-        name: "name",
-        message: " provide engineer name"
-    },
-    {
-        type: "input",
-        name: "id",
-        message: "provide Engineer id "
-    },
-    {
-        type: "input",
-        name: "email",
-        message: "provide Engineer email "
-    }, 
-    {
-        type: "input",
-        name: "github",
-        message: " provide engineer github link"
-    }, 
-]
-const internquestions  = [
-    {
-        type: "input",
-        name: "name",
-        message: " provide intern name"
-    },
-    {
-        type: "input",
-        name: "id",
-        message: "provide intern id "
-    },
-    {
-        type: "input",
-        name: "email",
-        message: "provide intern email "
-    }, 
-    {
-        type: "input",
-        name: "school",
-        message: "provide interns schools"
-    }, 
-]
- // team can only have one manager but must have a manager
- function managerProfile() {
-    inquirer.prompt(managerquestions).then(response => {
-        console.log(response)
+    function viewEmployees() {
+   db.query('SELECT * from employee', function (err, results) {
+      if (err) throw err;
+      console.table(results);
+      start();
     });
- }
- managerProfile()
+   
+  
+  }
+  function viewEmployeesByManager() {
+    //tbd 
+}
+function removeEmployee() {
+    //tbd 
+}  
+function updateEmployeeRole() {
+    //tbd 
+}  
+function updateEmployeeManager() {
+    //tbd 
+}  
+function viewRoles() {
+    //tbd 
+}  
+function addRole() {
+    //tbd 
+}  
+function removeRole() {
+    //tbd 
+}  
+function viewDepartment() {
+    //tbd 
+}  
+function addDepartment() {
+    //tbd 
+}  
+function removeDepartment() {
+    //tbd 
+}  
+function addEmployee() { 
+  prompt([ 
+    {
 
- function engineerProfile() {
-    inquirer.prompt(engineerquestions).then(response => {
-        console.log(response)
-    });
- }
- engineerProfile() 
+    },
+    {
+      
+    },
+    {
+      
+    },
+    {
+      
+    }
+  ]).then(res => {
+    db.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ?',[res], function (err, results) {
+      if (err) throw err;
+      console.table(results);
+      start();
+    });  
+  });
 
- function internProfile() {
-    inquirer.prompt(managerquestions).then(response => {
-        console.log(response)
-    });
- }
- internProfile()
- // team can have multiple engineer and interns 
-
- // collect input 
- //insert to HTML template 
- // generate html in Dist folder 
+ 
+}  
+function quit() {
+    //tbd 
+}  
